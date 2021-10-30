@@ -7,5 +7,7 @@ QQ Browser Query Title Corpus
 2：非常相关，递增的
 
 项目地址：https://github.com/CLUEbenchmark/QBQTC
+
 榜单：https://www.cluebenchmarks.com/qbqtc.html
+
 相关问题请联系：CLUEbenchmark@163.com
