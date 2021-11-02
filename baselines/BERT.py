@@ -66,15 +66,15 @@ clue7.train(net, train_loader, valid_loader, criterion, args.num_epochs, optimiz
 
 
 # 预测函数
-def model_predict(net, test_iter):
+def model_predict(pre_net, test_iter):
     # 预测模型
     print('加载最优模型')
-    net.load_state_dict(torch.load('../model/best.pth'))
-    net.to(device)
+    pre_net.load_state_dict(torch.load('../model/best.pth'))
+    pre_net.to(device)
     print('inference测试集')
     with torch.no_grad():
         start = time.time()
-        test_acc, test_f1 = clue7.evaluate_accuracy(test_iter, net, device)
+        test_acc, test_f1 = clue7.evaluate_accuracy(test_iter, pre_net, device)
         print('test acc %.3f, test f1 %.3f, time %.1f sec'
               % (test_acc, test_f1, time.time() - start))
 

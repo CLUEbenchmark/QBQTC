@@ -5,6 +5,7 @@ from tqdm import tqdm
 from sklearn import metrics
 import time
 
+
 class CustomDataset(torch.utils.data.Dataset):
     def __init__(self, file, tokenizer, max_len):
         self.tokenizer = tokenizer
