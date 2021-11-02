@@ -7,7 +7,11 @@ TODO 这里是简要的数据集介绍
 
 # baseline效果对比
 TODO baseline效果对比
-
+| 模型 | 开发集（dev) | 测试集（test) | 训练参数 |
+| :----:| :----: | :----: | :----: |
+| BERT-base |F1:92.30 EM:86.60 | F1:91.46 EM:85.49 |  batch=32, length=512, epoch=2, lr=3e-5, warmup=0.1 |
+| RoBERTa-wwm-ext |F1:94.26 EM:89.29 | F1:93.53 EM:88.12 |  batch=32, length=512, epoch=2, lr=3e-5, warmup=0.1|
+| RoBERTa-wwm-large-ext |***F1:95.32 EM:90.54*** | ***F1:95.06 EM:90.70*** | batch=32, length=512, epoch=2, lr=2.5e-5, warmup=0.1 |
 
 # 一键运行baseline
 <a href="https://huggingface.co/bert-base-chinese/tree/main">BERT-base</a>
