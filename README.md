@@ -17,7 +17,12 @@ TODO baseline效果对比
     2、进入到相应的目录
            例如：
            cd QBQTC/baselines
-    3、运行对应任务的脚本(GPU方式): 会自动下载模型和任务数据并开始运行。
+    4、下载对应任务模型参数
+    	<a href="https://huggingface.co/bert-base-chinese/tree/main">BERT-base</a>
+    	<a href="https://huggingface.co/hfl/chinese-roberta-wwm-ext">RoBERTa-wwm-ext</a>
+    	<a href="https://huggingface.co/hfl/chinese-roberta-wwm-ext-large">RoBERTa-wwm-large</a>
+    	
+    3、运行对应任务的模型(GPU方式): 。
        python BERT.py --model_name_or_path ../weights/chinese-roberta-wwm-ext --max_seq_length 52 --batch_size 512 --num_epochs 7 --learning_rate 2e-5 --num_labels 3
        简化版：python BERT.py
 
