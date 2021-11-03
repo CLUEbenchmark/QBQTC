@@ -68,11 +68,12 @@ def evaluate_accuracy(data_iter, net, device=torch.device('cpu')):
     return acc_sum.item()/n, valid_f1
 
 
-def train(net, train_iter, valid_iter, criterion, num_epochs, optimizer, device):
+def train(net, train_iter, valid_iter, criterion, num_epochs, optimizer, device, args):
     print('training on', device)
     net.to(device)
     best_test_f1 = 0
-    scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=2, gamma=0.9)  # 设置学习率下降策略
+    # 设置学习率下降策略
+    scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=args.warmup_step, gamma=args.warmup_proportion)
     # scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=5, eta_min=2e-06)  # 余弦退火
     for epoch in range(num_epochs):
         train_l_sum = torch.tensor([0.0], dtype=torch.float32, device=device)
