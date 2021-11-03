@@ -35,8 +35,8 @@ test_set = opt.CustomDataset('test_public.json', tokenizer, args.max_seq_length)
 
 # DataLoader
 train_params = {'batch_size': args.batch_size, 'shuffle': True}
-valid_params = {'batch_size': args.batch_size, 'shuffle': True}
-test_params = {'batch_size': args.batch_size, 'shuffle': False}
+valid_params = {'batch_size': 1, 'shuffle': True}
+test_params = {'batch_size': 1, 'shuffle': False}
 train_loader = torch.utils.data.DataLoader(train_set, **train_params)
 valid_loader = torch.utils.data.DataLoader(valid_set, **valid_params)
 test_loader = torch.utils.data.DataLoader(test_set, **test_params)
@@ -77,7 +77,7 @@ def model_predict(pre_net, test_iter):
     print('inference测试集')
     with torch.no_grad():
         start = time.time()
-        test_acc, test_f1 = opt.evaluate_accuracy(test_iter, pre_net, device)
+        test_acc, test_f1 = opt.evaluate_accuracy(args, test_iter, pre_net, device)
         print('test acc %.3f, test f1 %.3f, time %.1f sec'
               % (test_acc, test_f1, time.time() - start))
 
