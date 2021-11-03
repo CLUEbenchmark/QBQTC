@@ -6,7 +6,7 @@ Created on Mon Nov 1 2021
 """
 import time
 import torch
-import clue7
+from clue7 import opt
 import argparse
 from transformers import BertTokenizer, BertModel, BertConfig
 
@@ -28,9 +28,9 @@ args = my_parser.parse_args()
 
 # 数据预处理
 tokenizer = BertTokenizer.from_pretrained(args.model_name_or_path + '/vocab.txt')
-train_set = clue7.CustomDataset('train.json', tokenizer, args.max_seq_length)
-valid_set = clue7.CustomDataset('dev.json', tokenizer, args.max_seq_length)
-test_set = clue7.CustomDataset('test_public.json', tokenizer, args.max_seq_length)
+train_set = opt.CustomDataset('train.json', tokenizer, args.max_seq_length)
+valid_set = opt.CustomDataset('dev.json', tokenizer, args.max_seq_length)
+test_set = opt.CustomDataset('test_public.json', tokenizer, args.max_seq_length)
 
 # DataLoader
 train_params = {'batch_size': args.batch_size, 'shuffle': True}
@@ -64,7 +64,7 @@ criterion = torch.nn.CrossEntropyLoss()  # 选择损失函数
 optimizer = torch.optim.Adam(net.parameters(), lr=args.learning_rate)  # 选择优化器
 
 # 训练模型
-clue7.train(net, train_loader, valid_loader, criterion, args.num_epochs, optimizer, device, args)
+opt.train(net, train_loader, valid_loader, criterion, args.num_epochs, optimizer, device, args)
 
 
 # 预测函数
@@ -76,7 +76,7 @@ def model_predict(pre_net, test_iter):
     print('inference测试集')
     with torch.no_grad():
         start = time.time()
-        test_acc, test_f1 = clue7.evaluate_accuracy(test_iter, pre_net, device)
+        test_acc, test_f1 = opt.evaluate_accuracy(test_iter, pre_net, device)
         print('test acc %.3f, test f1 %.3f, time %.1f sec'
               % (test_acc, test_f1, time.time() - start))
 
