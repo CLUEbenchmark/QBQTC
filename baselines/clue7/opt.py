@@ -32,8 +32,9 @@ class CustomDataset(torch.utils.data.Dataset):
             query, title,
             truncation=True,
             add_special_tokens=True,
-            max_length=self.max_len,
-            pad_to_max_length=True,
+            padding=self.max_len,
+            # max_length=self.max_len,
+            # pad_to_max_length=True,
             return_token_type_ids=True
         )
         ids = inputs['input_ids']
