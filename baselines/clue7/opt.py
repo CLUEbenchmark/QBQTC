@@ -4,6 +4,7 @@ from tqdm import tqdm
 from sklearn import metrics
 import time
 import torch
+from collections import defaultdict
 
 
 # 自定义数据集
@@ -46,8 +47,34 @@ class CustomDataset(torch.utils.data.Dataset):
         }
 
 
+# 各个类别性能度量的函数
+def category_performance_measure(labels_right, labels_pred, num_label=2):
+    text_labels = list(set(labels_right))
+
+    TP = dict.fromkeys(text_labels, 0)  # 预测正确的各个类的数目
+    TP_FP = dict.fromkeys(text_labels, 0)  # 测试数据集中各个类的数目
+    TP_FN = dict.fromkeys(text_labels, 0)  # 预测结果中各个类的数目
+
+    label_dict = defaultdict(list)
+    for num in range(num_label):
+        label_dict[num].append(str(num))
+
+    # 计算TP等数量
+    for i in range(0, len(labels_right)):
+        TP_FP[labels_right[i]] += 1
+        TP_FN[labels_pred[i]] += 1
+        if labels_right[i] == labels_pred[i]:
+            TP[labels_right[i]] += 1
+    # 计算准确率P，召回率R，F1值
+    for key in TP_FP:
+        P = float(TP[key]) / float(TP_FP[key] + 1e-9)
+        R = float(TP[key]) / float(TP_FN[key] + 1e-9)
+        F1 = P * R * 2 / (P + R) if (P + R) != 0 else 0
+        print("%s:\t P:%f\t R:%f\t F1:%f" % (key, P, R, F1))
+
+
 # 模型评估
-def evaluate_accuracy(data_iter, net, device=torch.device('cpu')):
+def evaluate_accuracy(args, data_iter, net, device=torch.device('cpu')):
     """Evaluate accuracy of a model on the given data set."""
     acc_sum, n = torch.tensor([0], dtype=torch.float32, device=device), 0
     y_pred_, y_true_ = [], []
@@ -67,6 +94,8 @@ def evaluate_accuracy(data_iter, net, device=torch.device('cpu')):
             y_true_.extend(targets.cpu().numpy().tolist())
             n += targets.shape[0]
     valid_f1 = metrics.f1_score(y_true_, y_pred_, average='macro')
+    if args.cate_performance:
+        category_performance_measure(y_true_, y_pred_, args.num_labels)
     return acc_sum.item()/n, valid_f1
 
 
@@ -102,7 +131,7 @@ def train(net, train_iter, valid_iter, criterion, num_epochs, optimizer, device,
                 y_pred.extend(torch.argmax(y_hat, dim=1).cpu().numpy().tolist())
                 y_true.extend(targets.cpu().numpy().tolist())
                 n += targets.shape[0]
-        valid_acc, valid_f1 = evaluate_accuracy(valid_iter, net, device)
+        valid_acc, valid_f1 = evaluate_accuracy(args, valid_iter, net, device)
         train_acc = train_acc_sum / n
         train_f1 = metrics.f1_score(y_true, y_pred, average='macro')
         print('epoch %d, loss %.4f, train acc %.3f, valid acc %.3f, '

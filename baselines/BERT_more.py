@@ -22,6 +22,7 @@ my_parser.add_argument("--learning_rate", default=2e-5, type=float, required=Fal
 my_parser.add_argument("--warmup_proportion", default=0.9, type=int, required=False)
 my_parser.add_argument("--warmup_step", default=2, type=int, required=False)
 my_parser.add_argument("--num_labels", default=3, type=int, required=False)
+my_parser.add_argument("--cate_performance", default=True, type=bool, required=False)
 
 
 args = my_parser.parse_args()
