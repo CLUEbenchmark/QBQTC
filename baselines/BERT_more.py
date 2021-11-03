@@ -16,7 +16,7 @@ my_parser = argparse.ArgumentParser()
 # 要求参数
 my_parser.add_argument("--model_name_or_path", default="../weights/chinese-roberta-wwm-ext", type=str, required=False)
 my_parser.add_argument("--max_seq_length", default=52, type=int, required=False)  # 文本截断长度
-my_parser.add_argument("--batch_size", default=256, type=int, required=False)
+my_parser.add_argument("--batch_size", default=64, type=int, required=False)
 my_parser.add_argument("--num_epochs", default=7, type=int, required=False)
 my_parser.add_argument("--learning_rate", default=5e-5, type=float, required=False)
 my_parser.add_argument("--warmup_proportion", default=0.9, type=int, required=False)
@@ -47,12 +47,30 @@ class BERTClass(torch.nn.Module):
         super(BERTClass, self).__init__()
         self.config = BertConfig.from_pretrained(args.model_name_or_path + '/config.json', output_hidden_states=True)
         self.bert = BertModel.from_pretrained(args.model_name_or_path + '/pytorch_model.bin', config=self.config)
-        self.linear = torch.nn.Linear(768, args.num_labels)  # 分三类
+        self.bi_lstm = torch.nn.LSTM(self.config.hidden_size*4, 128, 1, bidirectional=True)
+
+        self.dropout = torch.nn.Dropout(0.25)
+        self.softmax_d1 = torch.nn.Softmax(dim=1)
+        self.atten_layer = torch.nn.Linear(256, 16)
+        self.linear_layer = torch.nn.Linear(256, 16 * args.num_labels)
 
     def forward(self, ids, mask, token_type_ids):
-        sequence_output, pooler_output, hidden_states = self.bert(ids, attention_mask=mask, token_type_ids=token_type_ids)
+        sequence_output, pooler_output, hidden_states = self.bert(
+            input_ids=ids, attention_mask=mask, token_type_ids=token_type_ids
+        )
         # [bs, len, 768]  [bs, 768]
-        output = self.linear(pooler_output)
+        h11_share = hidden_states[-1][:, 0].unsqueeze(0)
+        h10_share = hidden_states[-2][:, 0].unsqueeze(0)
+        h09_share = hidden_states[-3][:, 0].unsqueeze(0)
+        h08_share = hidden_states[-4][:, 0].unsqueeze(0)
+        concat_hidden_share = torch.cat((h11_share, h10_share, h09_share, h08_share), 2)  # [1, bs, 768*4]
+        cls_emb = self.bi_lstm(concat_hidden_share)[0].squeeze(0)  # [bs, 256]
+
+        attention_score = self.atten_layer(cls_emb)  # [bs, 16]
+        attention_score = self.dropout(self.softmax_d1(attention_score).unsqueeze(1))  # [bs, 1, 16]
+        value = self.linear_layer(cls_emb).contiguous().view(-1, 16, args.num_labels)  # [bs, 16, 3]
+        output = torch.matmul(attention_score, value).squeeze(1)  # [bs, 3]
+
         return output
 
 
