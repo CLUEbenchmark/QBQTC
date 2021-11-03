@@ -17,7 +17,7 @@ f1_score来自于sklearn.metrics，计算公式如下：
 `F1 =  2 * (precision * recall) / (precision + recall)`
 
 # 一键运行baseline
-🏝运行环境：pytorch 1.7.1/cuda 11.0 + transformers 3.5.0
+## 🏝运行环境：pytorch 1.7.1/cuda 11.0 + transformers 3.5.0
 ---------------------------------------------------------------------
     使用方式：
     1、克隆项目 
