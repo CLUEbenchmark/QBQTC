@@ -14,6 +14,7 @@ TODO baseline效果对比
 | <a href="https://huggingface.co/hfl/chinese-roberta-wwm-ext-large">RoBERTa-wwm-large-ext</a> | F1:92.6 Acc:93.0 | F1:61.7 Acc:63.7 | F1:65.1 Acc:65.9 | batch=256, length=52, epoch=7, lr=2e-5, warmup=0.9|
 
 # 一键运行baseline
+🏝运行环境：pytorch 1.7.1/cuda 11.0 + transformers 3.5.0
 ---------------------------------------------------------------------
     使用方式：
     1、克隆项目 
