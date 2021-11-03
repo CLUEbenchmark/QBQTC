@@ -18,7 +18,7 @@ my_parser.add_argument("--model_name_or_path", default="../weights/chinese-rober
 my_parser.add_argument("--max_seq_length", default=52, type=int, required=False)  # 文本截断长度
 my_parser.add_argument("--batch_size", default=64, type=int, required=False)
 my_parser.add_argument("--num_epochs", default=7, type=int, required=False)
-my_parser.add_argument("--learning_rate", default=5e-5, type=float, required=False)
+my_parser.add_argument("--learning_rate", default=2e-5, type=float, required=False)
 my_parser.add_argument("--warmup_proportion", default=0.9, type=int, required=False)
 my_parser.add_argument("--warmup_step", default=2, type=int, required=False)
 my_parser.add_argument("--num_labels", default=3, type=int, required=False)
@@ -78,7 +78,7 @@ net = BERTClass()
 net.to(device)
 
 # 超参数设置
-criterion = clue7.DiceLoss()  # 选择损失函数
+criterion = clue7.FocalLoss()  # 选择损失函数
 optimizer = torch.optim.Adam(net.parameters(), lr=args.learning_rate)  # 选择优化器
 
 # 训练模型

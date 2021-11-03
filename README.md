@@ -29,7 +29,7 @@ f1_score来自于sklearn.metrics，计算公式如下：
     	QBQTC/weights/chinese-roberta-wwm-ext
     	QBQTC/weights/chinese-roberta-wwm-ext-large
     4、运行对应任务的模型(GPU方式): 
-       python BERT.py --model_name_or_path ../weights/chinese-roberta-wwm-ext --max_seq_length 52 --batch_size 512 --num_epochs 7 --learning_rate 2e-5 --num_labels 3
+       python BERT.py --model_name_or_path ../weights/chinese-roberta-wwm-ext --max_seq_length 52 --batch_size 64 --num_epochs 7 --learning_rate 2e-5 --num_labels 3
        简化版：python BERT.py
 
 # 数据集例子
