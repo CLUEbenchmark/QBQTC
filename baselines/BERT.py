@@ -16,7 +16,7 @@ my_parser = argparse.ArgumentParser()
 # 要求参数
 my_parser.add_argument("--model_name_or_path", default="../weights/chinese-roberta-wwm-ext", type=str, required=False)
 my_parser.add_argument("--max_seq_length", default=52, type=int, required=False)  # 文本截断长度
-my_parser.add_argument("--batch_size", default=256, type=int, required=False)
+my_parser.add_argument("--batch_size", default=64, type=int, required=False)
 my_parser.add_argument("--num_epochs", default=7, type=int, required=False)
 my_parser.add_argument("--learning_rate", default=5e-5, type=float, required=False)
 my_parser.add_argument("--warmup_proportion", default=0.9, type=int, required=False)
@@ -47,7 +47,7 @@ class BERTClass(torch.nn.Module):
         super(BERTClass, self).__init__()
         self.config = BertConfig.from_pretrained(args.model_name_or_path + '/config.json')
         self.bert = BertModel.from_pretrained(args.model_name_or_path + '/pytorch_model.bin', config=self.config)
-        self.linear = torch.nn.Linear(768, args.num_labels, bias=True)  # 分三类
+        self.linear = torch.nn.Linear(self.config.hidden_size, args.num_labels, bias=True)  # 分三类
 
     def forward(self, ids, mask, token_type_ids):
         sequence_output, pooler_output = self.bert(input_ids=ids, attention_mask=mask, token_type_ids=token_type_ids)

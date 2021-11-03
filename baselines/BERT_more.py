@@ -78,7 +78,7 @@ net = BERTClass()
 net.to(device)
 
 # 超参数设置
-criterion = torch.nn.CrossEntropyLoss()  # 选择损失函数
+criterion = clue7.DiceLoss()  # 选择损失函数
 optimizer = torch.optim.Adam(net.parameters(), lr=args.learning_rate)  # 选择优化器
 
 # 训练模型

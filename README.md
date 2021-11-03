@@ -9,9 +9,12 @@ TODO 这里是简要的数据集介绍
 TODO baseline效果对比
 | 模型 | 训练集（train) | 验证集（dev) | 测试集（test) | 训练参数 |
 | :----:| :----: | :----: | :----: | :----: |
-| <a href="https://huggingface.co/bert-base-chinese/tree/main">BERT-base</a> | F1:93.2  Acc:93.7 | F1: 64.1 Acc:66.6 | F1: 65.1 Acc:66.2 | batch=256, length=52, epoch=7, lr=2e-5, warmup=0.9 |
-|<a href="https://huggingface.co/hfl/chinese-roberta-wwm-ext"> RoBERTa-wwm-ext</a> | F1:89.0 Acc:89.8 | F1:62.3 Acc:64.8 | F1:65.1 Acc:66.2 | batch=256, length=52, epoch=7, lr=2e-5, warmup=0.9|
-| <a href="https://huggingface.co/hfl/chinese-roberta-wwm-ext-large">RoBERTa-wwm-large-ext</a> | F1:92.6 Acc:93.0 | F1:61.7 Acc:63.7 | F1:65.1 Acc:65.9 | batch=256, length=52, epoch=7, lr=2e-5, warmup=0.9|
+| <a href="https://huggingface.co/bert-base-chinese/tree/main">BERT-base</a> | F1:93.2  Acc:93.7 | F1: 64.1 Acc:66.6 | F1: 65.1 Acc:66.2 | batch=64, length=52, epoch=7, lr=2e-5, warmup=0.9 |
+|<a href="https://huggingface.co/hfl/chinese-roberta-wwm-ext"> RoBERTa-wwm-ext</a> | F1:89.0 Acc:89.8 | F1:62.3 Acc:64.8 | F1:65.1 Acc:66.2 | batch=64, length=52, epoch=7, lr=2e-5, warmup=0.9|
+| <a href="https://huggingface.co/hfl/chinese-roberta-wwm-ext-large">RoBERTa-wwm-large-ext</a> | F1:92.6 Acc:93.0 | F1:61.7 Acc:63.7 | F1:65.1 Acc:65.9 | batch=64, length=52, epoch=7, lr=2e-5, warmup=0.9|
+
+f1_score来自于sklearn.metrics，计算公式如下：
+`F1 =  2 * (precision * recall) / (precision + recall)`
 
 # 一键运行baseline
 🏝运行环境：pytorch 1.7.1/cuda 11.0 + transformers 3.5.0

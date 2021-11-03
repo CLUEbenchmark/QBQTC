@@ -1,11 +1,13 @@
 # coding=utf-8
-import torch
 import json
 from tqdm import tqdm
 from sklearn import metrics
 import time
+import torch
+import torch.nn.functional as F
 
 
+# 自定义数据集
 class CustomDataset(torch.utils.data.Dataset):
     def __init__(self, file, tokenizer, max_len):
         self.tokenizer = tokenizer
@@ -45,6 +47,7 @@ class CustomDataset(torch.utils.data.Dataset):
         }
 
 
+# 模型评估
 def evaluate_accuracy(data_iter, net, device=torch.device('cpu')):
     """Evaluate accuracy of a model on the given data set."""
     acc_sum, n = torch.tensor([0], dtype=torch.float32, device=device), 0
@@ -68,6 +71,7 @@ def evaluate_accuracy(data_iter, net, device=torch.device('cpu')):
     return acc_sum.item()/n, valid_f1
 
 
+# 模型训练
 def train(net, train_iter, valid_iter, criterion, num_epochs, optimizer, device, args):
     print('training on', device)
     net.to(device)
@@ -111,3 +115,64 @@ def train(net, train_iter, valid_iter, criterion, num_epochs, optimizer, device,
             best_test_f1 = valid_f1
             torch.save(net.state_dict(), '../model/best.pth')
         scheduler.step()  # 更新学习率
+
+
+# loss
+class FocalLoss(torch.nn.Module):
+    """Multi-class Focal loss implementation"""
+    def __init__(self, gamma=2, weight=None, ignore_index=-100):
+        super(FocalLoss, self).__init__()
+        self.gamma = gamma
+        self.weight = weight
+        self.ignore_index = ignore_index
+
+    def forward(self, input, target):
+        """
+        input: [N, C]
+        target: [N, ]
+        """
+        logpt = F.log_softmax(input, dim=1)
+        pt = torch.exp(logpt)
+        logpt = (1-pt)**self.gamma * logpt
+        loss = F.nll_loss(logpt, target, self.weight, ignore_index=self.ignore_index)
+        return loss
+
+
+class DiceLoss(torch.nn.Module):
+    """DiceLoss implemented from 'Dice Loss for Data-imbalanced NLP Tasks'
+    Useful in dealing with unbalanced data
+    """
+    def __init__(self):
+        super(DiceLoss, self).__init__()
+
+    def forward(self, input, target):
+        """
+        input: [N, C]
+        target: [N, ]
+        """
+        prob = torch.softmax(input, dim=1)
+        prob = torch.gather(prob, dim=1, index=target.unsqueeze(1))
+        dsc_i = 1 - ((1 - prob) * prob) / ((1 - prob) * prob + 1)
+        dice_loss = dsc_i.mean()
+        return dice_loss
+
+
+# 交叉熵平滑滤波 防止过拟合
+class LabelSmoothingCrossEntropy(torch.nn.Module):
+    def __init__(self, eps=0.1, reduction='mean', ignore_index=-100):
+        super(LabelSmoothingCrossEntropy, self).__init__()
+        self.eps = eps
+        self.reduction = reduction
+        self.ignore_index = ignore_index
+
+    def forward(self, output, target):
+        c = output.size()[-1]
+        log_preds = F.log_softmax(output, dim=-1)
+        if self.reduction=='sum':
+            loss = -log_preds.sum()
+        else:
+            loss = -log_preds.sum(dim=-1)
+            if self.reduction=='mean':
+                loss = loss.mean()
+        return loss*self.eps/c + (1-self.eps) * F.nll_loss(log_preds, target, reduction=self.reduction,
+                                                           ignore_index=self.ignore_index)
