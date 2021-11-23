@@ -13,9 +13,6 @@ TODO baseline效果对比
 |<a href="https://huggingface.co/hfl/chinese-roberta-wwm-ext"> RoBERTa-wwm-ext</a> | F1:89.0 Acc:89.8 | F1:62.3 Acc:64.8 | F1:65.1 Acc:66.2 | batch=64, length=52, epoch=7, lr=2e-5, warmup=0.9|
 | <a href="https://huggingface.co/hfl/chinese-roberta-wwm-ext-large">RoBERTa-wwm-large-ext</a> | F1:92.6 Acc:93.0 | F1:61.7 Acc:63.7 | F1:65.1 Acc:65.9 | batch=64, length=52, epoch=7, lr=2e-5, warmup=0.9|
 
-以上几个模型在CLUE上都能找到地址：
-参考：https://github.com/CLUEbenchmark/CLUE/blob/master/baselines/models/bert_wwm_ext/run_classifier_afqmc.sh
-
 f1_score来自于sklearn.metrics，计算公式如下：
 `F1 =  2 * (precision * recall) / (precision + recall)`
 
