@@ -48,12 +48,14 @@ class BERTClass(torch.nn.Module):
         super(BERTClass, self).__init__()
         self.config = BertConfig.from_pretrained(args.model_name_or_path + '/config.json')
         self.bert = BertModel.from_pretrained(args.model_name_or_path + '/pytorch_model.bin', config=self.config)
+        self.dropout = torch.nn.Dropout(0.25)
         self.linear = torch.nn.Linear(self.config.hidden_size, args.num_labels, bias=True)  # 分三类
 
     def forward(self, ids, mask, token_type_ids):
         sequence_output, pooler_output = self.bert(input_ids=ids, attention_mask=mask, token_type_ids=token_type_ids)
         # [bs, 768]
-        output = self.linear(pooler_output)
+        output = self.dropout(pooler_output)
+        output = self.linear(output)
         return output
 
 
