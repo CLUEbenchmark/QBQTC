@@ -8,14 +8,15 @@ import time
 import torch
 from clue7 import opt
 import argparse
-from transformers import BertTokenizer, BertModel, BertConfig
-
+from transformers import BertTokenizer, BertModel, BertConfig # # from pytorch_transformers  import BertTokenizer # transformers
+import os
+os.environ["USE_TF"] = 'None'
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 my_parser = argparse.ArgumentParser()
 # 要求参数
 my_parser.add_argument("--model_name_or_path", default="../weights/chinese-roberta-wwm-ext", type=str, required=False)
-my_parser.add_argument("--max_seq_length", default=52, type=int, required=False)  # 文本截断长度
+my_parser.add_argument("--max_seq_length", default=52, type=int, required=False)  # 文本截断长度 52
 my_parser.add_argument("--batch_size", default=64, type=int, required=False)
 my_parser.add_argument("--num_epochs", default=10, type=int, required=False)
 my_parser.add_argument("--learning_rate", default=5e-5, type=float, required=False)
@@ -46,7 +47,7 @@ test_loader = torch.utils.data.DataLoader(test_set, **test_params)
 class BERTClass(torch.nn.Module):
     def __init__(self):
         super(BERTClass, self).__init__()
-        self.config = BertConfig.from_pretrained(args.model_name_or_path + '/config.json')
+        self.config = BertConfig.from_pretrained(args.model_name_or_path + '/bert_config.json')
         self.bert = BertModel.from_pretrained(args.model_name_or_path + '/pytorch_model.bin', config=self.config)
         self.linear = torch.nn.Linear(self.config.hidden_size, args.num_labels, bias=True)  # 分三类
 

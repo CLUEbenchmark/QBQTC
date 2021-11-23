@@ -19,7 +19,7 @@ class CustomDataset(torch.utils.data.Dataset):
                 sample = json.loads(line)
                 query = sample["query"]
                 title = sample["title"]
-                relevant = int(sample["relevant"])
+                relevant = int(sample["label"])
                 self.ex_list.append((query, title, relevant))
 
     def __len__(self):
