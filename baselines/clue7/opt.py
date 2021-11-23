@@ -32,9 +32,8 @@ class CustomDataset(torch.utils.data.Dataset):
             query, title,
             truncation=True,
             add_special_tokens=True,
-            padding=self.max_len,
-            # max_length=self.max_len,
-            # pad_to_max_length=True,
+            max_length=self.max_len,
+            pad_to_max_length=True,
             return_token_type_ids=True
         )
         ids = inputs['input_ids']
@@ -49,8 +48,9 @@ class CustomDataset(torch.utils.data.Dataset):
 
 
 # 各个类别性能度量的函数
-def category_performance_measure(labels_right, labels_pred, num_label=2):
-    text_labels = list(set(labels_right))
+def category_performance_measure(labels_right, labels_pred, num_label=3):
+    text_labels = [i for i in range(num_label)]
+    # text_labels = list(set(labels_right))
 
     TP = dict.fromkeys(text_labels, 0)  # 预测正确的各个类的数目
     TP_FP = dict.fromkeys(text_labels, 0)  # 测试数据集中各个类的数目
