@@ -12,6 +12,9 @@ TODO baseline效果对比
 | <a href="https://huggingface.co/bert-base-chinese/tree/main">BERT-base</a> | F1:93.2  Acc:93.7 | F1: 64.1 Acc:66.6 | F1: 65.1 Acc:66.2 | batch=64, length=52, epoch=7, lr=2e-5, warmup=0.9 |
 |<a href="https://huggingface.co/hfl/chinese-roberta-wwm-ext"> RoBERTa-wwm-ext</a> | F1:89.0 Acc:89.8 | F1:62.3 Acc:64.8 | F1:65.1 Acc:66.2 | batch=64, length=52, epoch=7, lr=2e-5, warmup=0.9|
 | <a href="https://huggingface.co/hfl/chinese-roberta-wwm-ext-large">RoBERTa-wwm-large-ext</a> | F1:92.6 Acc:93.0 | F1:61.7 Acc:63.7 | F1:65.1 Acc:65.9 | batch=64, length=52, epoch=7, lr=2e-5, warmup=0.9|
+|(new)<a href="https://huggingface.co/bert-base-chinese/tree/main">BERT-base</a> | F1:80.3  Acc:84.3 | F1: 64.9 Acc:72.4 | F1: 64.1 Acc:71.8 | batch=64, length=52, epoch=7, lr=2e-5, warmup=0.9 |
+|(new)<a href="https://huggingface.co/hfl/chinese-roberta-wwm-ext"> RoBERTa-wwm-ext</a> | F1:67.9 Acc:76.2 | F1:64.9 Acc:71.5 | F1:64.0 Acc:71.0 | batch=64, length=52, epoch=7, lr=2e-5, warmup=0.9|
+|(new)<a href="https://huggingface.co/hfl/chinese-roberta-wwm-ext-large">RoBERTa-wwm-large-ext</a> | F1:79.8 Acc:84.2 | F1:65.1 Acc:72.4 | F1:66.3 Acc:73.1 | batch=64, length=52, epoch=7, lr=2e-5, warmup=0.9|
 
 f1_score来自于sklearn.metrics，计算公式如下：
 `F1 =  2 * (precision * recall) / (precision + recall)`
