@@ -26,9 +26,8 @@ f1_score来自于sklearn.metrics，计算公式如下：
 
 # 一键运行baseline
 
-## 🏝运行环境：python 3.x/pytorch 1.7.1/cuda 11.0 + transformers 3.5.0
+### 🏝运行环境：python 3.x/pytorch 1.7.1/cuda 11.0 + transformers 3.5.0
 
----------------------------------------------------------------------
     使用方式：
     1、克隆项目 
        git clone https://github.com/CLUEbenchmark/QBQTC.git
