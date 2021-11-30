@@ -1,2 +1,2 @@
-torch == 1.7.1+gpu
+torch == 1.7.1
 transformers == 3.5.0

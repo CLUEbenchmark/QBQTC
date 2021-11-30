@@ -6,10 +6,11 @@ Created on Mon Nov 1 2021
 """
 import time
 import torch
-from clue7 import opt
+from clue import opt
 import argparse
 from transformers import BertTokenizer, BertModel, BertConfig # # from pytorch_transformers  import BertTokenizer # transformers
 import os
+os.environ["CUDA_VISIBLE_DEVICES"] = '2' # 设置使用第几张卡
 os.environ["USE_TF"] = 'None'
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 

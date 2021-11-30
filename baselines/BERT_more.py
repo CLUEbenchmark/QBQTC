@@ -6,7 +6,7 @@ Created on Mon Nov 1 2021
 """
 import time
 import torch
-from clue7 import opt, loss
+from clue import opt, loss
 import argparse
 from transformers import BertTokenizer, BertModel, BertConfig
 
