@@ -55,7 +55,7 @@ f1_score来自于sklearn.metrics，计算公式如下：
 # 提交样例
 <a href="./resources/qbqtc_submit_examples/">提交样例</a>
 
-在测试集(test.json)上
+在测试集(test.json)上做测试预测，并提交到<a href="https://www.CLUEbenchmarks.com">测评系统</a>
 
 # 问题反馈与交流
 1) 可以提交issue反馈问题；或添加QQ交流群:836811304
